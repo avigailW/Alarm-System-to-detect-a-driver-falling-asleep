@@ -1,5 +1,6 @@
 #pragma once
 #include "BufferQueue.h"
+#include <fstream>
 
 
 class Consumer {
@@ -11,7 +12,7 @@ public:
 
 private:
     static void* consumeProduct(void* param);
-    bool detectClosedEyes();
+    void detectClosedEyes();
 
     bool sentinal;
     BufferQueue* m_bufferQueue;
@@ -19,7 +20,9 @@ private:
     Mat my_consumed_frame;
     int m_uniqueid;
     int m_count;
-    int m_countClosed;
+    int m_QueueIdx;
+
+    string m_mac_adr;
 
     CascadeClassifier face_cascade;
     CascadeClassifier eyes_cascade;
@@ -27,16 +30,35 @@ private:
     String eyes_cascade_name = "haarcascade_eye_tree_eyeglasses.xml";
     String face_cascade_name = "haarcascade_frontalface_alt.xml";
 
+    bool m_detectEyesQueue[20];
 
 };
 
 
 inline Consumer::Consumer(int unique_id, BufferQueue* bQueue)
 {
+    system("python3 get_mac_address.py");
+    system("python3 read_mac_address.py");
+
+    ifstream myfile("mac_address.txt");
+    if (myfile.is_open())
+    {
+        myfile >> m_mac_adr;
+    }
+    cout << m_mac_adr << endl;
+
+    myfile.close();
+
+  
+
     m_uniqueid = unique_id;
     m_bufferQueue = bQueue;
     m_count = 0;
-    m_countClosed = 0;
+    m_QueueIdx = 0;
+    for (int i = 0; i < 20; ++i)
+    {
+        m_detectEyesQueue[i] = false;
+    }
 
     //-- 1. Load the cascades
     if (!face_cascade.load(face_cascade_name))
@@ -71,14 +93,22 @@ inline void* Consumer::consumeProduct(void* param)
     while (_this->sentinal)
     {
         _this->my_consumed_frame = _this->m_bufferQueue->consumeFromQueue();
-        if (!_this->detectClosedEyes())   //no closed eyes
+        
+        _this->detectClosedEyes();
+        int countClosed = 0;
+        for (int i = 0; i < 20; ++i)
         {
-            _this->m_countClosed = 0;
+            if (_this->m_detectEyesQueue[i])
+                ++countClosed;
         }
-        if (_this->m_countClosed > 8)
+        if (countClosed > 14)
         {
             cout << "sleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\n";
             system("python3 speaker.py");
+            string k = "python3 send_requests.py ";
+            k += _this->m_mac_adr;
+            system(k.c_str());
+
         }
 
         ++_this->m_count;
@@ -89,34 +119,22 @@ inline void* Consumer::consumeProduct(void* param)
 }
 
 
-inline bool Consumer::detectClosedEyes()
+inline void Consumer::detectClosedEyes()
 {
     if (my_consumed_frame.empty())
     {
-        return false;
+        return;
     }
-    
+
     Mat gray;
     cvtColor(my_consumed_frame, gray, COLOR_BGR2GRAY);
-
-    // ret, img = cap.read()
 
             // Detect faces in the image
 
     std::vector<Rect> faces;
-    /*vector<double> weights;
-    vector<int> levels;*/
 
     face_cascade.detectMultiScale(gray, faces, 1.1, 5, 0, Size(30, 30), Size());// , levels, weights, 1.1, 3, 0, Size(), Size(), true);
-    
-        //faces = faceCascade.detectMultiScale(
-        //    frame,
-        //    scaleFactor = 1.1,
-        //    minNeighbors = 5,
-        //    minSize = (30, 30),
-        //    # flags = cv2.CV_HAAR_SCALE_IMAGE
-        //)
-        //# print("Found {0} faces!".format(len(faces)))
+
     
     for (size_t i = 0; i < faces.size(); i++)
     {
@@ -130,8 +148,8 @@ inline bool Consumer::detectClosedEyes()
         eyes_cascade.detectMultiScale(faceROI, eyes);
         if (eyes.size() <= 1)
         {
-            ++m_countClosed;
-            return true;
+            m_detectEyesQueue[m_QueueIdx] = true;
+            m_QueueIdx = (++m_QueueIdx) % 20;
         }
         for (size_t j = 0; j < eyes.size(); j++)
         {
@@ -146,5 +164,5 @@ inline bool Consumer::detectClosedEyes()
     char buff[30];
     sprintf(buff, "sleepOutput%02d.jpg", m_count);
     imwrite(buff, my_consumed_frame);
-    return false;
+
 }

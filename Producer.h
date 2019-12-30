@@ -47,9 +47,9 @@ private:
             cap >> _this->my_created_product;
             std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
             std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
-            char buff[30];
+            /*char buff[30];
             sprintf(buff, "output%02d.jpg", _this->m_count);
-            imwrite(buff, _this->my_created_product);
+            imwrite(buff, _this->my_created_product);*/
             if (count == 0)
             {
                 _this->m_bufferQueue->addProductToQueue(_this->my_created_product);
