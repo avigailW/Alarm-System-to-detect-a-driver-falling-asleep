@@ -8,11 +8,11 @@
 int main()
 {
 
-    BufferQueue bufferQueue;
-    Producer producer(1, &bufferQueue);
+    BufferQueue *bufferQueue = new BufferQueue();
+    Producer producer(1, bufferQueue);
     producer.StartProducing();
 
-    Consumer consumer(1, &bufferQueue);
+    Consumer consumer(1, bufferQueue);
     consumer.StartConsuming();
     
 
