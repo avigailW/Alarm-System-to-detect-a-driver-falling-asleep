@@ -3,6 +3,8 @@
 #include <fstream>
 #include <chrono>
 
+#define DETECTQUEUESIZE 4
+
 class Consumer {
 
 public:
@@ -30,7 +32,7 @@ private:
     String eyes_cascade_name = "haarcascade_eye_tree_eyeglasses.xml";
     String face_cascade_name = "haarcascade_frontalface_alt.xml";
 
-    bool m_detectEyesQueue[20];
+    bool m_detectEyesQueue[DETECTQUEUESIZE];
 
 };
 
@@ -49,13 +51,13 @@ inline Consumer::Consumer(int unique_id, BufferQueue* bQueue)
 
     myfile.close();
 
-  
+
 
     m_uniqueid = unique_id;
     m_bufferQueue = bQueue;
     m_count = 0;
     m_QueueIdx = 0;
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < DETECTQUEUESIZE; ++i)
     {
         m_detectEyesQueue[i] = false;
     }
@@ -93,22 +95,23 @@ inline void* Consumer::consumeProduct(void* param)
     while (_this->sentinal)
     {
         _this->my_consumed_frame = _this->m_bufferQueue->consumeFromQueue();
-        
+
         _this->detectClosedEyes();
         int countClosed = 0;
-        for (int i = 0; i < 20; ++i)
+        for (int i = 0; i < DETECTQUEUESIZE; ++i)
         {
             if (_this->m_detectEyesQueue[i])
                 ++countClosed;
         }
-        if (countClosed > 14)
+        //cout << countClosed << endl;
+        if (countClosed >= 3)
         {
             cout << "sleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\n";
             system("python3 speaker.py");
             string k = "python3 send_requests.py ";
             k += _this->m_mac_adr;
             system(k.c_str());
-            for (int i = 0; i < 20; ++i)
+            for (int i = 0; i < DETECTQUEUESIZE; ++i)
             {
                 _this->m_detectEyesQueue[i] = false;
             }
@@ -117,7 +120,7 @@ inline void* Consumer::consumeProduct(void* param)
         ++_this->m_count;
     }
 
- 
+
     return NULL;
 }
 
@@ -126,13 +129,14 @@ inline void Consumer::detectClosedEyes()
 {
     if (my_consumed_frame.empty())
     {
+        cout << "ERROR!" << endl;
         return;
     }
 
     Mat gray;
     cvtColor(my_consumed_frame, gray, COLOR_BGR2GRAY);
 
-            // Detect faces in the image
+    // Detect faces in the image
 
     std::vector<Rect> faces;
 
@@ -140,24 +144,25 @@ inline void Consumer::detectClosedEyes()
 
     face_cascade.detectMultiScale(gray, faces, 1.1, 5, 0, Size(30, 30), Size());// , levels, weights, 1.1, 3, 0, Size(), Size(), true);
 
-    
+
     for (size_t i = 0; i < faces.size(); i++)
     {
         cout << "found face\n";
         /*Point center(faces[i].x + faces[i].width / 2, faces[i].y + faces[i].height / 2);
         ellipse(my_consumed_frame, center, Size(faces[i].width / 2, faces[i].height / 2), 0, 0, 360, Scalar(255, 0, 255), 4);*/
-        
+
         Mat faceROI = gray(faces[i]);
         //-- In each face, detect eyes
         std::vector<Rect> eyes;
         eyes_cascade.detectMultiScale(faceROI, eyes);
 
-        
+
         //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
 
-        if (eyes.size() >= 1)
+        if (eyes.size() <= 1)
         {
+            cout << "eyes" << endl;
             m_detectEyesQueue[m_QueueIdx] = true;
         }
         else
@@ -179,8 +184,8 @@ inline void Consumer::detectClosedEyes()
         m_detectEyesQueue[m_QueueIdx] = false;
     }
 
-    
-    m_QueueIdx = (++m_QueueIdx) % 20;
+
+    m_QueueIdx = (++m_QueueIdx) % DETECTQUEUESIZE;
 
     /*char buff[30];
     sprintf(buff, "sleepOutput%02d.jpg", m_count);
