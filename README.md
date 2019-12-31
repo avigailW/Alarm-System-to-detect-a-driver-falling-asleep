@@ -1,10 +1,11 @@
 # KeepUp
-Alarm system for bus and truck companies, identifies a driver who fell asleep while traveling with the help of a camera,
-and immediately activates an alarm to wake the sleeping driver, at the same time sending a message to the site 
+Alarm system for bus and truck companies, a camera identifies a driver who falls asleep while driving,
+and immediately activates an alarm to awaken the sleeping driver, while sending a message to the website 
 with the details of the driver and the time he fell asleep.
 
-An alarm system is intended to diagnose the driver's entry into an emergency state in advance, 
-while providing an alert to prevent the phenomenon from continuing to jeopardize the driver and other factors in the environment.
+The alarm system is intended to detect in real time the driver's entering into a dangerous state,and providing an alarm to prevent the situiation from continuing and jeopardizing the driver and others in the surroundings.
+
+
 
 
 
