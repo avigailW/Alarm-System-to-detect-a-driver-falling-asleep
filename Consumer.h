@@ -1,7 +1,7 @@
 #pragma once
 #include "BufferQueue.h"
 #include <fstream>
-
+#include <chrono>
 
 class Consumer {
 
@@ -103,12 +103,15 @@ inline void* Consumer::consumeProduct(void* param)
         }
         if (countClosed > 14)
         {
-            cout << "sleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\n";
+            cout << "sleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\nsleeping!!!!!\n";
             system("python3 speaker.py");
             string k = "python3 send_requests.py ";
             k += _this->m_mac_adr;
             system(k.c_str());
-
+            for (int i = 0; i < 20; ++i)
+            {
+                _this->m_detectEyesQueue[i] = false;
+            }
         }
 
         ++_this->m_count;
@@ -133,36 +136,54 @@ inline void Consumer::detectClosedEyes()
 
     std::vector<Rect> faces;
 
+    //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
     face_cascade.detectMultiScale(gray, faces, 1.1, 5, 0, Size(30, 30), Size());// , levels, weights, 1.1, 3, 0, Size(), Size(), true);
 
     
     for (size_t i = 0; i < faces.size(); i++)
     {
         cout << "found face\n";
-        //cerr << "Detection " << faces[i] << " with weight " << weights[i] << endl;
-        Point center(faces[i].x + faces[i].width / 2, faces[i].y + faces[i].height / 2);
-        ellipse(my_consumed_frame, center, Size(faces[i].width / 2, faces[i].height / 2), 0, 0, 360, Scalar(255, 0, 255), 4);
+        /*Point center(faces[i].x + faces[i].width / 2, faces[i].y + faces[i].height / 2);
+        ellipse(my_consumed_frame, center, Size(faces[i].width / 2, faces[i].height / 2), 0, 0, 360, Scalar(255, 0, 255), 4);*/
+        
         Mat faceROI = gray(faces[i]);
         //-- In each face, detect eyes
         std::vector<Rect> eyes;
         eyes_cascade.detectMultiScale(faceROI, eyes);
-        if (eyes.size() <= 1)
+
+        
+        //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
+
+        if (eyes.size() >= 1)
         {
             m_detectEyesQueue[m_QueueIdx] = true;
-            m_QueueIdx = (++m_QueueIdx) % 20;
         }
-        for (size_t j = 0; j < eyes.size(); j++)
+        else
+        {
+            m_detectEyesQueue[m_QueueIdx] = false;
+        }
+        /*for (size_t j = 0; j < eyes.size(); j++)
         {
             Point eye_center(faces[i].x + eyes[j].x + eyes[j].width / 2, faces[i].y + eyes[j].y + eyes[j].height / 2);
             int radius = cvRound((eyes[j].width + eyes[j].height) * 0.25);
             circle(my_consumed_frame, eye_center, radius, Scalar(255, 0, 0), 4);
-        }
+        }*/
+    }
+    //std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    //std::cout << "Time difference cons = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
+
+    if (faces.size() < 1)
+    {
+        m_detectEyesQueue[m_QueueIdx] = false;
     }
 
-    //       imshow("Eyes", frame);
+    
+    m_QueueIdx = (++m_QueueIdx) % 20;
 
-    char buff[30];
+    /*char buff[30];
     sprintf(buff, "sleepOutput%02d.jpg", m_count);
-    imwrite(buff, my_consumed_frame);
+    imwrite(buff, my_consumed_frame);*/
 
 }

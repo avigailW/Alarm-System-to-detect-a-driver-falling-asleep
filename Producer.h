@@ -2,7 +2,7 @@
 
 #include "BufferQueue.h"
 #include <ctime>
-#include <chrono>
+
 
 
 class Producer {
@@ -43,20 +43,18 @@ private:
         Producer* _this = (Producer*)param;
         while (_this->sentinal )   
         {
-            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
             cap >> _this->my_created_product;
-            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-            std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
-            /*char buff[30];
-            sprintf(buff, "output%02d.jpg", _this->m_count);
-            imwrite(buff, _this->my_created_product);*/
+            //std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
+            
             if (count == 0)
             {
                 _this->m_bufferQueue->addProductToQueue(_this->my_created_product);
             }
             ++(_this->m_count);
             ++count;
-            if (count == 4)
+            if (count == 5)
             {
                 count = 0;
             }

@@ -15,7 +15,7 @@
 using namespace std;
 using namespace cv;
 
-#define BUFFER_SIZE 30
+#define BUFFER_SIZE 35
 
 class BufferQueue {
 
