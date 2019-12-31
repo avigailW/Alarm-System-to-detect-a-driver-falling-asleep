@@ -8,12 +8,10 @@ while providing an alert to prevent the phenomenon from continuing to jeopardize
 
 
 
-
-
-*Shira Zaltsman
-*Shani Ehrentreu
-*Tirza RubinStein
-*Avigial Wilk
+* Shira Zaltsman
+* Shani Ehrentreu
+* Tirza RubinStein
+* Avigial Wilk
 
 ## Credits and References
 * [GPIO - raspberry pi](https://www.raspberrypi.org/documentation/usage/gpio/)
