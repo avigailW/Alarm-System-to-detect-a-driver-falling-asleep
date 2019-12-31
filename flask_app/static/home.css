@@ -1,0 +1,24 @@
+body {
+  text-align: center
+  margin-top: 500px
+}
+
+.home-page {
+  /*background: #f4f4f4;*/
+  margin: 150px 0px;
+}
+
+#home-title{
+  margin-top: 400px;
+  color: #f0ede1;
+  font-size: 6em;
+}
+
+#home-disc{
+  color: #f0ede1;
+  position: relative;
+  font-family: "montserrat", sans-serif;
+  font-size: 2em;
+  font-weight: 400;
+  line-height: 1.4em;
+}

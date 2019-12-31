@@ -1,0 +1,80 @@
+<!-- the html code responsible for the home page.
+      it contains: start button and short discription of website and alert-->
+{% extends "main_layout.html" %}
+<script src ="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+{% block content %}
+<script type="text/javascript">
+function DriversChart() {
+var data_drivers= JSON.parse('{{ drivers | tojson | safe}}');
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme:   "light4", // "light1", "light1", "light1", "light1",
+	title:{
+		text: "Sleep Detect For Driver"
+	},
+	axisY: {
+		title: "sleep times"
+	},
+	data: [{
+		type: "column",
+		showInLegend: true,
+		legendMarkerColor: "grey",
+		legendText: "drivers names",
+		dataPoints: data_drivers.data
+	}]
+});
+chart.render();
+}
+
+function HoursChart() {
+var data_hours= JSON.parse('{{ hours | tojson | safe}}');
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2",
+	title:{
+		text: "Sleep Detect For Hours"
+	},
+	axisY:{
+		title: "sleep times"
+	},
+	data: [{
+		type: "line",
+		dataPoints: data_hours.data
+
+	}]
+});
+chart.render();
+}
+
+function DaysChart() {
+var data_days= JSON.parse('{{ days | tojson | safe}}');
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2",
+	title:{
+		text: "Sleep Detect For Day in Week"
+	},
+	axisY:{
+		title: "sleep times"
+	},
+	data: [{
+		type: "line",
+		dataPoints: data_days.data
+	}]
+});
+chart.render();
+}
+
+
+</script>
+  <div class="container mt-5">
+      <button type="button" class="btn btn-dark" onclick="DriversChart()">Drivers</button>
+      <button type="button" class="btn btn-dark" onclick="HoursChart()">Hours</button>
+      <button type="button" class="btn btn-dark" onclick="DaysChart()">Days</button>
+        <div class="content-section">
+            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                <script src="https://canvasjs.com/assets/script/canvasjs.min.js" onload="DriversChart()"></script>
+        </div>
+  </div>
+
+{% endblock content %}

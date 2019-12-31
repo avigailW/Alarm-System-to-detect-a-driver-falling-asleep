@@ -1,0 +1,51 @@
+body, html {
+  height: 100%;
+}
+
+.bg {
+  /* The image used */
+  background-image: url('../static/background1.png');
+
+  /* Full height */
+  height: 100%;
+  width: 100%
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.bg-steel {
+  background-color:rgba(150,150,150,0.8);
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #b9cacf;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #333333;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.main-container{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  top: 80px;
+  margin:  auto;
+  margin: auto;
+}
+
+.content-section {
+  background: rgba(255,255,255,0.8);
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin: auto;
+}
