@@ -5,7 +5,7 @@ with the details of the driver and the time he fell asleep.
 
 The alarm system is intended to detect in real time the driver's entering into a dangerous state,and providing an alarm to prevent the situiation from continuing and jeopardizing the driver and others in the surroundings.
 
-We created the server-side part using flask and built a user-friendly website where the company can register its drivers, and see the data collected on drivers who fell asleep while driving. and analyze the data according to the drivers, hours, ages and days
+The server-side part was created using flask and built a user-friendly website where the company can register its drivers, and see the data collected on drivers who fell asleep while driving. and analyze the data according to the drivers, hours, ages and days
 
 
 * Shira Zaltsman
@@ -13,7 +13,8 @@ We created the server-side part using flask and built a user-friendly website wh
 * Tirza RubinStein
 * Avigial Wilk
 
-##website Screenshots
+## website Screenshots
+
 
 
 
