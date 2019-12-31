@@ -1,5 +1,5 @@
 # KeepUp
-Alarm system is for bus and truck companies, identifies a driver who fell asleep while traveling with the help of a camera,
+Alarm system for bus and truck companies, identifies a driver who fell asleep while traveling with the help of a camera,
 and immediately activates an alarm to wake the sleeping driver, at the same time sending a message to the site 
 with the details of the driver and the time he fell asleep.
 
