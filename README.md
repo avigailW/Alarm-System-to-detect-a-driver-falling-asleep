@@ -14,7 +14,7 @@ The server-side part was created using flask and built a user-friendly website w
 * Avigial Wilk
 
 ## website Screenshots
-![](/images/2019-12-31.png =250x250 )
+![](/images/2019-12-31.png | width=250 hight=200 )
 
 
 
