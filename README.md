@@ -14,7 +14,7 @@ The server-side part was created using flask and building a user-friendly websit
 * Avigial Wilk
 
 ## website Screenshots
-<img src="images/2019-12-31.png" alt="drawing" width="500"/> <img src="images/2019-12-31(1).png" alt="drawing" width="500"/>
+<img src="images/2019-12-31.png" alt="drawing" width="450"/> <img src="images/2019-12-31 (1).png" alt="drawing" width="450"/>
 
 ![](images/2019-12-31(2).png)
 
