@@ -14,11 +14,15 @@ The server-side part was created using flask and built a user-friendly website w
 * Avigial Wilk
 
 ## website Screenshots
-![](/images/2019-12-31.png )
-![](/images/2019-12-31 (1).png )
-![](/images/2019-12-31 (2).png )
-![](/images/2019-12-31 (4).png )
-![](/images/2019-12-31 (6).png )
+![](images/2019-12-31.png)
+
+![](images/2019-12-31 (1).png)
+
+![](images/2019-12-31 (2).png)
+
+![](images/2019-12-31 (4).png)
+
+![](images/2019-12-31 (6).png)
 
 
 
