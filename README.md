@@ -17,7 +17,7 @@ while providing an alert to prevent the phenomenon from continuing to jeopardize
 
 ## Credits and References
 * [GPIO - raspberry pi](https://www.raspberrypi.org/documentation/usage/gpio/)
-* [flask tutorual](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
+* [flask tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
 * [HTML Canvas](https://www.w3schools.com/graphics/canvas_intro.asp)
 * Amitai, Kfir, Ola, Michal, Margalit for tutoring and support
 
