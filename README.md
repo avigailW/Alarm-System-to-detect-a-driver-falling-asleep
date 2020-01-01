@@ -22,6 +22,7 @@ The server-side part was created using flask and building a user-friendly websit
 
 
 ## Credits and References
+* https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html
 * [GPIO - raspberry pi](https://www.raspberrypi.org/documentation/usage/gpio/)
 * [flask tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
 * [Flask-MongoEngine](https://flask-mongoengine.readthedocs.io/en/latest/)
